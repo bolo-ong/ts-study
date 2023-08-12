@@ -174,3 +174,131 @@
   이런식의 if문을 사용해 정확한 타입으로 체크하는게 좋을 것 같다.
   추가적으로 undefined일 수 있으니, else를 이용해서 예외처리도 해주자*/
 }
+
+{
+  //type alias, type Animal = string | number | undefined; 이런식으로 타입을 변수로 지정할 수 있다, PascalCase로 작명
+  //type alias를 이용해 타입을 변수로 작성할 때, readonly속성을 사용하면, arr나 obj자료안에 요소의 변경도 캐치해준다.
+  type Student = {
+    readonly name: string;
+  };
+  type Student2 = {
+    name?: string; // name : string | undefined 와 같다.
+  };
+  type Name = string;
+  type Age = number;
+  type Person = Name | Age; // string | number 와 같다
+
+  //&연산자로 obj타입 extend하기
+  type PositionX = { x: number };
+  type PositionY = { y: number };
+  type NewType = PositionX & PositionY; //{ x: number } & { x: number } 와 같다.
+  let position: NewType = { x: 10, y: 20 };
+}
+
+{
+  //ex)
+  type Obj = {
+    color?: string;
+    size: number;
+    readonly position: number[];
+  };
+
+  type User = {
+    name: string;
+    phone: number;
+    email?: string;
+  };
+
+  type IsAdult = boolean;
+
+  type IsAdultUser = User & IsAdult;
+}
+
+{
+  //Literal Types 정확하게 원하는 데이터만 들어올 수 있게 설정가능, const변수와 비슷하나 다중값을 입력할 수 있음
+  let num: 123;
+  num = 123;
+  //num = 1 err발생
+
+  let gender: "male" | "female";
+  //gender는 'male' 혹은 'female'만 입력가능
+
+  function 함수7(a: "hello"): 0 | 1 {
+    return 1;
+  }
+  함수7("hello"); // 'hello'외 인자는 모두 에러발생
+
+  function rps(
+    rps: "rock" | "paper" | "scissors"
+  ): ("rock" | "paper" | "scissors")[] {
+    return ["rock"];
+  }
+  rps("rock");
+
+  var data = {
+    name: "kim",
+  }; //as const, 아래 에러를 이렇게 처리 가능, obj의 value를 타입으로 지정해주며, 모든 속성에 readonly를 붙여줌
+
+  function 함수8(a: "kim") {}
+  함수8("kim");
+  //함수8(data.name) 에러발생, 'kim'이라는 자료가 아닌, 'kim'이라는 타입을 허용하기 때문에 data.name의 'kim'은 string타입이라 에러가 발생함
+  함수8(data.name as "kim"); //때문에 이런식으로 가능 혹은 line 240참고
+}
+
+{
+  //함수 타입 지정
+  type TypeFunction = (a: number) => number;
+
+  let 함수: TypeFunction = function () {
+    return 10;
+  };
+
+  //obj내의 함수 타입지정
+  type Member = {
+    name: string;
+    plusOne: TypeFunction;
+    changeName: () => void;
+  };
+
+  let 회원정보: Member = {
+    name: "kim",
+    plusOne(a: number): number {
+      return a + 1;
+    },
+    changeName: () => {
+      console.log("hi");
+    },
+  };
+  회원정보.plusOne(1);
+  회원정보.changeName();
+}
+
+{
+  //ex
+  const cutZero = (str: string): string => {
+    if (str.charAt(0) === "0") {
+      return str.slice(1, str.length);
+    } else {
+      return str;
+    }
+  };
+  console.log(cutZero("Orange")); // Orange
+  console.log(cutZero("0range")); // range
+
+  type RemoveDash = (param: string) => number;
+  const removeDash: RemoveDash = (phone) => {
+    return parseInt(phone.replace(/-/g, ""));
+  };
+  console.log(removeDash("010-1234-5678")); // orange
+
+  type CallBackFunction = (
+    phone: string,
+    func1: (str: string) => string,
+    func2: RemoveDash
+  ) => {};
+  const callBackFunction: CallBackFunction = (phone, cutZero, removeDash) => {
+    return removeDash(cutZero(phone));
+  };
+
+  console.log(callBackFunction("010-1111-2222", cutZero, removeDash));
+}
