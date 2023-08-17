@@ -171,7 +171,7 @@
     function 함수8(a) { }
     함수8("kim");
     //함수8(data.name) 에러발생, 'kim'이라는 자료가 아닌, 'kim'이라는 타입을 허용하기 때문에 data.name의 'kim'은 string타입이라 에러가 발생함
-    함수8(data.name); //때문에 이런식으로 가능 혹은 line 240참고
+    함수8(data.name); //때문에 이런식으로 가능 혹은 Ln 240참고
 }
 {
     var 함수_1 = function () {
@@ -209,4 +209,40 @@
         return removeDash(cutZero(phone));
     };
     console.log(callBackFunction("010-1111-2222", cutZero, removeDash));
+}
+{
+    var Car = /** @class */ (function () {
+        function Car(modelName, carPrice) {
+            var _this = this;
+            this.tax = function () { return _this.price / 10; };
+            this.model = modelName;
+            this.price = carPrice;
+        }
+        return Car;
+    }());
+    var car1 = new Car("소나타", 3000);
+    console.log(car1);
+    console.log(car1.tax());
+    var Word = /** @class */ (function () {
+        function Word() {
+            var param = [];
+            for (var _i = 0; _i < arguments.length; _i++) {
+                param[_i] = arguments[_i];
+            }
+            var _this = this;
+            this.str = [];
+            this.num = [];
+            param.forEach(function (v) {
+                return typeof v === "string" ? _this.str.push(v) : _this.num.push(v);
+            });
+        }
+        return Word;
+    }());
+    var obj = new Word("kim", 3, 5, "park");
+    console.log(obj.num);
+    console.log(obj.str);
+}
+{
+    var 학생 = { name: "cm" };
+    var 선생 = { name: "cm", age: 10 };
 }

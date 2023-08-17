@@ -242,7 +242,7 @@
   function 함수8(a: "kim") {}
   함수8("kim");
   //함수8(data.name) 에러발생, 'kim'이라는 자료가 아닌, 'kim'이라는 타입을 허용하기 때문에 data.name의 'kim'은 string타입이라 에러가 발생함
-  함수8(data.name as "kim"); //때문에 이런식으로 가능 혹은 line 240참고
+  함수8(data.name as "kim"); //때문에 이런식으로 가능 혹은 Ln 240참고
 }
 
 {
@@ -301,4 +301,61 @@
   };
 
   console.log(callBackFunction("010-1111-2222", cutZero, removeDash));
+}
+
+{
+  class Car {
+    //작성 안해도 디폴트값으로, 스트링이나 넘버타입을 갖고있음
+    model: string;
+    price: number;
+    constructor(modelName: string, carPrice: number) {
+      this.model = modelName;
+      this.price = carPrice;
+    }
+    tax = (): number => this.price / 10;
+  }
+  let car1 = new Car("소나타", 3000);
+  console.log(car1);
+  console.log(car1.tax());
+
+  class Word {
+    str: string[];
+    num: number[];
+    constructor(...param: (string | number)[]) {
+      this.str = [];
+      this.num = [];
+      param.forEach((v) =>
+        typeof v === "string" ? this.str.push(v) : this.num.push(v)
+      );
+    }
+  }
+
+  let obj = new Word("kim", 3, 5, "park");
+  console.log(obj.num);
+  console.log(obj.str);
+}
+
+{
+  //interface문법, 작성법은 type과 다르게 class만들 때 처럼 = 기호를 안씀, 장점으로는 extends로 복사가능
+  interface Student {
+    name: string;
+  }
+  let 학생: Student = { name: "cm" };
+
+  interface Teacher extends Student {
+    // name: string;
+    age: number;
+  }
+  let 선생: Teacher = { name: "cm", age: 10 };
+
+  //type에서는 & 기호로 intersection type 가능
+  type Animal = { name: string };
+  type Cat = { age: number } & Animal;
+
+  //두 방법의 차이는, interface문법은 중복선언을 허용해줌, type은 중복선언 시 에러 발생
+  interface Student {
+    //위에서 선언했던 Student interface를 재선언, 재선언 시에는 두개가 합쳐짐
+    // name: string;
+    // score: number;
+  }
 }
