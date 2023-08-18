@@ -296,4 +296,44 @@ var _this = this;
     console.log(maxNumber(1, 3, 2, 6, 5, 4, 8));
 }
 {
+    //this에 대해서
+    var obj = {
+        value: 42,
+        test: this.value,
+        regularFunction: function () {
+            console.log(this.value); // obj 객체의 value 속성
+        },
+        arrowFunction: function () {
+            console.log(_this.value); // arrowFunction의 경우 오브젝트를 생성하고 있는 전역 스코프에서 값을 바인딩 하게됨
+        },
+    };
+    console.log(obj.test);
+    obj.regularFunction(); // 출력: 42 (obj 객체의 value 속성)
+    obj.arrowFunction(); // 출력: undefined 또는 다른 값 (글로벌 스코프에서의 value 속성)
+    //const obj = { } 는 객체 리터럴 문법으로 오브젝트를 생성하는 거기 때문에, arrowFunction의 경우 오브젝트를 생성하고 있는 전역 스코프에서 값을 바인딩 하게됨
+    var Example = /** @class */ (function () {
+        function Example(value) {
+            var _this = this;
+            this.arrowFunction = function () {
+                //화살표 함수의 경우 함수 선언 시점에서의 스코프를 기억하기 때문에 프로토타입에 할당됨
+                console.log(_this.value);
+            };
+            this.value = value;
+        }
+        Example.prototype.regularFunction = function () {
+            //선언될 때마다 각각의 인스턴스마다 독립적인 함수가 생성되기 때문에 프로토타입에 할당되지 않음
+            console.log(this.value);
+        };
+        return Example;
+    }());
+    var example = new Example(42);
+    console.log(example);
+    var arrowFunction = example.arrowFunction;
+    arrowFunction(); // 출력: 42
+    example.arrowFunction(); //42
+    var regularFunction = example.regularFunction;
+    regularFunction(); // TypeError: Cannot read property 'value' of undefined, 함수 자체만 꺼내온것
+    example.regularFunction(); //42
+    /*정리하자면, const obj = { }는 new Object()함수를 사용하는 것이기 때문에, 새로운 객체를 생성하는거며, 생성하는 위치의 스코프에서 this값을 바인딩
+    new Example()은 class내부의 constructor()함수를 호출하고, constructor를 호출한 class의 스코프에서 this값을 바인딩 */
 }

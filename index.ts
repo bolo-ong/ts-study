@@ -430,7 +430,41 @@
 }
 
 {
+  //this에 대해서
+  const obj = {
+    value: 42,
+    test: this.value,
+    regularFunction: function () {
+      console.log(this.value); // obj 객체의 value 속성
+    },
+    arrowFunction: () => {
+      console.log(this.value); // arrowFunction의 경우 오브젝트를 생성하고 있는 전역 스코프에서 값을 바인딩 하게됨
+    },
+  };
+
+  console.log(obj.test);
+  obj.regularFunction(); // 출력: 42 (obj 객체의 value 속성)
+  obj.arrowFunction(); // 출력: undefined 또는 다른 값 (글로벌 스코프에서의 value 속성)
+  //const obj = { } 는 객체 리터럴 문법으로 오브젝트를 생성하는 거기 때문에, arrowFunction의 경우 오브젝트를 생성하고 있는 전역 스코프에서 값을 바인딩 하게됨
+
+  class Example {
+    value: number;
+    constructor(value: number) {
+      this.value = value;
+    }
+    regularFunction() {
+      //선언될 때마다 각각의 인스턴스마다 독립적인 함수가 생성되기 때문에 프로토타입에 할당되지 않음
+      console.log(this.value);
+    }
+    arrowFunction = () => {
+      //화살표 함수의 경우 함수 선언 시점에서의 스코프를 기억하기 때문에 프로토타입에 할당됨
+      console.log(this.value);
+    };
   }
+  const example = new Example(42);
+  console.log(example);
+  const arrowFunction = example.arrowFunction;
+  arrowFunction(); // 출력: 42
   example.arrowFunction(); //42
   const regularFunction = example.regularFunction;
   regularFunction(); // TypeError: Cannot read property 'value' of undefined, 함수 자체만 꺼내온것
