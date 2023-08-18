@@ -1,3 +1,4 @@
+var _this = this;
 {
     // 기본적으론 타입설정을 해주지 않아도, 자동으로 정해줌
     var name_1 = "CM";
@@ -245,4 +246,54 @@
 {
     var 학생 = { name: "cm" };
     var 선생 = { name: "cm", age: 10 };
+    /*type의 &기호에선, 같은 속성을 선언할 땐 오류가 발생하지 않으나, 해당 타입을 사용해서 오브젝트를 생성할 때 never타입이 발생함,
+    이런면에서 interface가 더 좋을 수 있음, 때문에 오브젝트 자료형의 경우 interface를 많이 사용*/
+}
+{
+    var item = {
+        brand: "samsung",
+        serialNumber: 1360,
+        model: ["tv", "phone"],
+    };
+    var cart = [
+        { product: "청소기", price: 7000 },
+        { product: "삼다수", price: 800 },
+    ];
+    var FcPlusMinus = {
+        plus: function (a, b) { return a + b; },
+        minus: function (a, b) { return a - b; },
+    };
+}
+{
+    //rest parameter 타입은 배열 형식으로
+    function 함수9() {
+        var a = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            a[_i] = arguments[_i];
+        }
+        // console.log(a)
+    }
+    함수9(1, 2, 3, 4, 5);
+    var person = { student: true, age: 20 };
+    function 함수10(_a) {
+        var student = _a.student, age = _a.age;
+        console.log(student, age);
+    }
+    함수10(person);
+    function maxNumber() {
+        var v = [];
+        for (var _i = 0; _i < arguments.length; _i++) {
+            v[_i] = arguments[_i];
+        }
+        var result = 0;
+        v.forEach(function (num) {
+            if (result < num) {
+                result = num;
+            }
+        });
+        return result;
+    }
+    console.log(maxNumber(1, 3, 2, 6, 5, 4, 8));
+}
+{
 }

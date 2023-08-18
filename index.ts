@@ -354,8 +354,88 @@
 
   //두 방법의 차이는, interface문법은 중복선언을 허용해줌, type은 중복선언 시 에러 발생
   interface Student {
-    //위에서 선언했던 Student interface를 재선언, 재선언 시에는 두개가 합쳐짐
-    // name: string;
-    // score: number;
+    //위에서 선언했던 Student interface를 재선언, 재선언 시에는 두개가 extend처럼 합쳐짐
+    // name: number; 같은 name을 재선언 하면서, 타입을 다르게 할 시 에러발생
+    // score: number; score라는 속성을 추가해줌
   }
+
+  /*type의 &기호에선, 같은 속성을 선언할 땐 오류가 발생하지 않으나, 해당 타입을 사용해서 오브젝트를 생성할 때 never타입이 발생함, 
+  이런면에서 interface가 더 좋을 수 있음, 때문에 오브젝트 자료형의 경우 interface를 많이 사용*/
+}
+
+{
+  interface Item {
+    brand: string;
+    serialNumber: number;
+    model: string[];
+  }
+  let item: Item = {
+    brand: "samsung",
+    serialNumber: 1360,
+    model: ["tv", "phone"],
+  };
+
+  interface Cart {
+    product: string;
+    price: number;
+  }
+  let cart: Cart[] = [
+    { product: "청소기", price: 7000 },
+    { product: "삼다수", price: 800 },
+  ];
+  interface NewCart extends Cart {
+    card: boolean;
+  }
+
+  interface PlusMinus {
+    plus: (a: number, b: number) => number;
+    minus: (a: number, b: number) => number;
+  }
+
+  let FcPlusMinus: PlusMinus = {
+    plus: (a, b) => a + b,
+    minus: (a, b) => a - b,
+  };
+}
+
+{
+  //rest parameter 타입은 배열 형식으로
+  function 함수9(...a: number[]) {
+    // console.log(a)
+  }
+  함수9(1, 2, 3, 4, 5);
+
+  interface Person {
+    student: boolean;
+    age: number;
+  } //type Person = {student:boolean, age:number}
+
+  let person: Person = { student: true, age: 20 };
+
+  function 함수10({ student, age }: Person) {
+    console.log(student, age);
+  }
+  함수10(person);
+
+  function maxNumber(...v: number[]): number {
+    let result = 0;
+    v.forEach((num) => {
+      if (result < num) {
+        result = num;
+      }
+    });
+    return result;
+  }
+  console.log(maxNumber(1, 3, 2, 6, 5, 4, 8));
+}
+
+{
+  }
+  example.arrowFunction(); //42
+  const regularFunction = example.regularFunction;
+  regularFunction(); // TypeError: Cannot read property 'value' of undefined, 함수 자체만 꺼내온것
+  example.regularFunction(); //42
+
+  /*정리하자면, const obj = { }는 new Object()함수를 사용하는 것이기 때문에, 새로운 객체를 생성하는거며, 생성하는 위치의 스코프에서 this값을 바인딩
+  new Example()은 class내부의 constructor()함수를 호출하고, constructor를 호출한 class의 스코프에서 this값을 바인딩 */
 }
