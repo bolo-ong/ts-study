@@ -427,6 +427,21 @@
     return result;
   }
   console.log(maxNumber(1, 3, 2, 6, 5, 4, 8));
+
+  interface UserType {
+    user: string;
+    comment: number[];
+    admin: boolean;
+  }
+  function 함수11({ user, comment, admin }: UserType) {
+    console.log(user, comment, admin);
+  }
+  함수11({ user: "kim", comment: [3, 5, 4], admin: false });
+
+  function 함수12([...v]: (string | number | boolean)[]) {
+    console.log(...v);
+  }
+  함수12([40, "wine", false]);
 }
 
 {
@@ -471,5 +486,290 @@
   example.regularFunction(); //42
 
   /*정리하자면, const obj = { }는 new Object()함수를 사용하는 것이기 때문에, 새로운 객체를 생성하는거며, 생성하는 위치의 스코프에서 this값을 바인딩
-  new Example()은 class내부의 constructor()함수를 호출하고, constructor를 호출한 class의 스코프에서 this값을 바인딩 */
+  new Example()은 class내부의 constructor()함수를 호출하기 때문에, class의 스코프에서 this값을 바인딩 */
+}
+
+{
+  /* Narrowing 방법 추가
+   &&연산자에 자료형을 넣으면, 처음 등장하는 falsy값을 남겨줌, 참고로 if(변수 != null)은 null과 undefined 두개를 동시에 걸러줌
+   ('str' in v) v가 str타입을 갖고있다면 true 
+   오브젝트 instanceof 부모class 오브젝트가 해당 부모class로 생성되었다면 true
+   비슷한 속성값을 갖고있는 타입을 구분하려면, Literal Types이 필요할 수 있음
+   */
+}
+
+{
+  //함수에 사용하는 never type, return값이 없어야하고, end point가 없어야함, 쓸일은 없고 필요시 :void를 사용하게되지만, 뭔지는 알고가자
+  function 함수13(): never {
+    throw new Error();
+    while (true) {}
+  }
+}
+{
+  //객체지향 프로그래밍을 위한 public, private, protected, static 키워드
+  class User {
+    name: string; //public name과 같고, 기본적으로 생략되어있는 디폴트값임 모든 자식들이 사용, 수정 가능하다는 뜻
+    private familyName: string = "kim"; //private 키워드가 있으면, class내부에서만 수정 가능
+    constructor(a) {
+      this.name = a + this.familyName;
+    }
+    이름변경함수(a) {
+      this.familyName = a;
+    }
+  }
+  let 유저1 = new User("민수");
+  //   console.log(유저1); User { familyName: 'kim', name: '민수kim' }
+  유저1.이름변경함수("park");
+  //   console.log(유저1);User { familyName: 'park', name: '민수kim' }
+}
+
+{
+  // protected 키워드
+  class User {
+    protected x = 10;
+  }
+  class NewUser extends User {
+    //User클래스를 복사, private속성은 복사(extends) 불가능, protected 키워드가 붙어 있으면 클래스간 복사(extends) 가능
+  }
+  //정리하자면, extends시, private속성은, 다른 class, 자식 모두 수정 불가능, protected는 다른 class는 사용, 수정 가능, 자식은 불가능
+}
+{
+  // static 키워드
+  class User {
+    static x = 10; //부모만 사용 가능,인스턴스(자식)에 물려주질않음 기본적으론 extends로 복사도 가능, ( private, protected, public )+ static이 가능
+    y = 20;
+    sum = User.x + this.y;
+  }
+
+  let 자식 = new User();
+  console.log(자식); //User { y: 20, sum: 30 }
+  console.log(User.x); //10 static속성으로 인해 부모의 값에 접근가능
+  //   console.log(User.y) //에러출력
+  User.x = 20;
+  let 자식2 = new User();
+  console.log(자식2); //User { y: 20, sum: 40 }
+}
+
+{
+  //정리 & 복습
+  class User {
+    private static x = 10; //다른 class에 복사(extends)할 수 없고, User.x로도 해당 class내부에서만 접근(수정,사용) 가능
+    public static y = 20; //부모만 사용가능하며, User.y로 내 외부 모두 접근(수정,사용)가능
+    protected z = 30; //다른 class에 복사(extends)할 수 있고, class내부에서만 수정가능
+  }
+}
+{
+  class User {
+    private static x = 10;
+    public static y = 20;
+
+    constructor(num: number) {
+      this.addOne(num);
+    }
+    addOne = (num: number) => {
+      console.log(User.x + num);
+    };
+    static printX() {
+      console.log(User.x);
+    }
+  }
+
+  new User(3);
+  new User(4);
+  User.printX();
+}
+
+{
+  /*(index.html 내부)
+<body>
+  <script src="index.js"></script>
+</body>*/
+  class Square {
+    constructor(
+      public width: number,
+      public height: number,
+      public color: string
+    ) {}
+    draw() {
+      let a = Math.random();
+      let square = `<div style="position:relative; 
+            top:${a * 400}px; 
+            left:${a * 400}px; 
+            width:${this.width}px; 
+            height : ${this.height}px; 
+            background:${this.color}"></div>`;
+      //   document.body.insertAdjacentHTML("beforeend", square);
+    }
+  }
+
+  let 네모 = new Square(30, 30, "red");
+  네모.draw();
+  네모.draw();
+  네모.draw();
+  네모.draw();
+}
+
+{
+  /*type, interface, ... 등 import export가 가능
+    export type Name = string;
+    import {Name} from './index.ts'*/
+}
+
+{
+  //타입을 파라미터로 입력하는 Generic함수
+  function 함수14<Mytype>(x: Mytype[]): Mytype {
+    //<타입명> 하면 타입을 파라미터로 받음
+    return x[0];
+  }
+  //<파라미터에 넣을 타입> 명시적으로 기재하나, 안써도 디폴트 값으로 맞춰주긴함
+  let a = 함수14<number>([4, 2]); //[4,2]
+  let b = 함수14<string>(["4", "2"]); //["4","2"]
+
+  function 함수15<Mytype2 extends number>(x: Mytype2) {
+    // extends 오른쪽에 있는 타입으로 제한을 해둠
+    return x - 1;
+  }
+  let c = 함수15<number>(100);
+
+  interface Animal {
+    name: string;
+    age: number;
+  }
+  let data = '{"name" : "dog", "age" : 1}';
+
+  function animalData<Type>(data: string): Type {
+    return JSON.parse(data);
+  }
+
+  console.log(animalData<Animal>(data));
+
+  class Person<T> {
+    name;
+    constructor(d: T) {
+      this.name = d;
+    }
+  }
+  let d = new Person<string>("abc");
+  d.name;
+}
+
+{
+  interface CarType {
+    model: string;
+    price: number;
+  }
+
+  class Car implements CarType {
+    // implements 오른쪽 타입의 속성을 갖고 있는지 확인해줌, 없다면 에러 출력
+    model: string; //타입을 지정해주는건 아니기 때문에, model;만 작성하면 any타입이됨
+    price: number = 1000;
+    constructor(a: string) {
+      this.model = a;
+    }
+  }
+  let 붕붕이 = new Car("morning");
+}
+
+{
+  //object index signature, 반복되는 속성 지정을 간편하게
+  interface StringOnly {
+    [key: string]: string | number;
+  }
+  let user: StringOnly = {
+    name: "kim",
+    age: 20,
+    location: "seoul",
+  };
+
+  //recursive타입, 비슷한 형태의 여러 데이터의 타입을 지정할때 사용
+  interface MyType {
+    "font-size": MyType | number;
+  }
+  let css: MyType = {
+    "font-size": {
+      "font-size": {
+        "font-size": 14,
+      },
+    },
+  };
+
+  //keyof를 사용하면 해당 오브젝트의 key를 유니온 타입으로 내보내줌
+  interface Person {
+    age: number;
+    name: string;
+  }
+  type PersonKeys = keyof Person; //age|number 타입
+  let a: PersonKeys = "name";
+
+  //타입변환기 (mapping)
+  type Car = {
+    color: boolean;
+    model: boolean;
+    price: boolean | number;
+  };
+
+  type TypeChanger<MyType> = {
+    [key in keyof MyType]: string;
+  };
+
+  type 새로운타입 = TypeChanger<Car>;
+
+  let obj: 새로운타입 = {
+    color: "red",
+    model: "kia",
+    price: "300",
+  };
+}
+
+{
+  type Bus = {
+    color: string;
+    model: boolean;
+    price: number;
+  };
+  //파라미터로 타입명과, 타입을 받아서 적용가능
+  type TypeChanger<MyType, T> = {
+    [key in keyof MyType]: T;
+  };
+
+  type NewBus = TypeChanger<Bus, boolean>;
+  type NewBus2 = TypeChanger<Bus, string[]>;
+}
+
+{
+  //조건문으로 타입만들기 & infer
+  type Age<T> = T;
+  let a: Age<string>;
+}
+{
+  type Age<T> = T extends string ? string : unknown;
+  let age: Age<string>; //age는 string 타입
+  let age2: Age<number>; //age는 unknown 타입
+}
+{
+  type FirstItem<T> = T extends any[] ? T[0] : any;
+
+  let age1: FirstItem<string[]>; //string
+  let age2: FirstItem<number>; //any
+}
+{
+  //infer R을 이용해서 타입을 추출할때 사용
+  type Person<T> = T extends infer R ? R : unknown;
+  type 새타입 = Person<string>; // 새타입은 string 타입입니다
+
+  type 타입추출<T> = T extends (infer R)[] ? R : unknown; //R은 boolean
+  type NewType = 타입추출<boolean[]>; // NewType 은 boolean 타입입니다
+}
+{
+  type 타입추출<T> = T extends () => infer R ? R : unknown; //함수의 리턴 타입을 R에 지정
+  type NewType = 타입추출<() => number>; // NewType은 number 타입입니다
+  type NewTypeB = ReturnType<() => number>; //이렇게도 가능
+}
+{
+  type Age<T> = T extends [string, ...any] ? T[0] : unknown;
+  let age1: Age<[string, number]>; //string타입
+  let age2: Age<[boolean, number]>; //unknown타입
+
+  type 타입뽑기<T> = T extends (x: infer R) => any ? R : any;
+  type a = 타입뽑기<(x: number) => void>; //type a = number
 }
