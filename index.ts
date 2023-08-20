@@ -359,8 +359,8 @@
     // score: number; score라는 속성을 추가해줌
   }
 
-  /*type의 &기호에선, 같은 속성을 선언할 땐 오류가 발생하지 않으나, 해당 타입을 사용해서 오브젝트를 생성할 때 never타입이 발생함, 
-  이런면에서 interface가 더 좋을 수 있음, 때문에 오브젝트 자료형의 경우 interface를 많이 사용*/
+  /*type의 &기호에선, 같은 속성을 상반되게 선언해도 오류가 발생하지 않으나, 해당 타입을 사용해서 오브젝트를 생성할 때 never타입이 발생함, 
+  이런면에서 에러를 미리 잡아주는 interface가 더 좋을 수 있음, 하지만 type의 유용한 Omit과 Pick을 사용하지 못하므로 잘 생각해서 사용해야함*/
 }
 
 {
@@ -772,4 +772,28 @@
 
   type 타입뽑기<T> = T extends (x: infer R) => any ? R : any;
   type a = 타입뽑기<(x: number) => void>; //type a = number
+}
+
+{
+  //Omit & Pick
+  interface Person {
+    name: string;
+    age: number;
+    address: string;
+  }
+
+  // Omit을 사용하여 address 속성을 제외한 타입을 생성
+  type PersonWithoutAddress = Omit<Person, "address">;
+
+  const personWithoutAddress: PersonWithoutAddress = {
+    name: "Alice",
+    age: 30,
+  };
+
+  // Pick을 사용하여 name 속성만을 선택한 타입을 생성
+  type PersonNameOnly = Pick<Person, "name">;
+
+  const personNameOnly: PersonNameOnly = {
+    name: "Bob",
+  };
 }
